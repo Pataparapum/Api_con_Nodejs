@@ -11,7 +11,6 @@ describe('Suite de prueba e2e para el curso', () => {
         request(app)
             .get('/')
             .end((err, res) => {
-                console.log(res.text);
                 assert.equal(res.text, "Hello World!")
                 done();
             });

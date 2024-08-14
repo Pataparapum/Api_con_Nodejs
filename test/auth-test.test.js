@@ -22,7 +22,7 @@ describe('Suite de pruebas auth', () => {
             .post('/login')
             .end((err,res) => {
                 request(app)
-                    .get('/tem')
+                    .get('/team')
                     .set('Authorization', `JWT ${res.body.token}`)
                     .end((err, res) => {
                         assert.equal(res.statusCode, 200);
