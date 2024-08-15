@@ -1,6 +1,8 @@
 import express from "express";
 import passport from "passport";
 import auth from "./auth.js";
+import jwt from 'jsonwebtoken';
+import * as userControl from "../controllers/users.js"
 
 const app = express();
 const port = 3000;
@@ -29,9 +31,18 @@ app.get('/', (req, res) => {
  * si son validad, generamos un JWT y lo devolvemos
  */
 app.post('/login', (req,res) => {
-    res.status(200).json(
-        {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.XbPfbIHMI6arZ3Y922BhjWgQzWXcXNrz0ogtVhfEd2o'}
-    )
+    //comprobamos credenciales
+    userControl.checkUserCredentials(req.body.user, req.body.password, (err, result) => {
+        if (!result) {
+            return res.status(401).json({message: 'Invalid credentials'})
+        }
+        //Si son validos, generamos un jwt y lo devolvemos
+        const token = jwt.sign({userId: req.body.user});
+        
+        res.status(200).json(
+            {token: token}
+        )
+    })
 });
 
 app.post('/team/pokemons', () => {
