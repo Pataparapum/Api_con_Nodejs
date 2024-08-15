@@ -1,29 +1,39 @@
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuidV4} from 'uuid';
 import * as crypto from '../myAPI/crypto.js';
 
-const userDatabase = {
-    '001': {
-        'password': '',
-        'salt' : '',
-        'userName': ''
-    }
-}
+const userDatabase = {};
 //  userId -> password
 
 const registerUser = (userName, password) => {
-    crypto.hashPassword(password, (err, result) => {
-        //guardar en la base de datos nuestro usuario
-        userDatabase[v4.v4] = {
-            username: userName,
-            password: result
+    let hashedPWd = crypto.hashPasswordSync(password)    
+
+    //guardar en la base de datos nuestro usuario
+    userDatabase[uuidV4()] = {
+        userName: userName,
+        password: hashedPWd
+    }
+}
+
+const getUserIdFromUserName = (userName) => {
+    for (let user in userDatabase) {
+        if (userDatabase[user].userName == userName) {
+            return userDatabase[user];
         }
-    })
+    }
 }
 
-const checkUserCredentials = (userId, password, done)  => {
+const checkUserCredentials = (userName, password, done)  => {
+    console.log('cheking user credentials');
+    
     // comprobar que las credenciales son correctas
-    let user = userDatabase[userId];
-    crypto.comparePassword(password, user.password, done)
+    let user = getUserIdFromUserName(userName)
+    
+    if (user) {
+        crypto.comparePassword(password, user.password, done)
+
+    } else {
+        done('Missing user')
+    }
 }
 
-export {registerUser, checkUserCredentials}
+export {registerUser, checkUserCredentials, userDatabase}
