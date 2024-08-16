@@ -1,23 +1,37 @@
 import {v4 as uuidV4} from 'uuid';
 import * as crypto from '../myAPI/crypto.js';
-
-const userDatabase = {};
+import * as teams from './teams.js'
+let userDatabase = {};
 //  userId -> password
 
 const registerUser = (userName, password) => {
     let hashedPWd = crypto.hashPasswordSync(password)    
-
+    let userId = uuidV4();
     //guardar en la base de datos nuestro usuario
-    userDatabase[uuidV4()] = {
+    userDatabase[userId] = {
         userName: userName,
         password: hashedPWd
     }
+
+    teams.bootstrapTeam(userId);
+}
+
+const cleanUpUsers = () => {
+    userDatabase = {};
+}
+
+const getUser = (userId) => {
+    return userDatabase[userId]
+    
+    
 }
 
 const getUserIdFromUserName = (userName) => {
     for (let user in userDatabase) {
         if (userDatabase[user].userName == userName) {
-            return userDatabase[user];
+            let userData = userDatabase[user]
+            userData.userId = user
+            return userData;
         }
     }
 }
@@ -36,4 +50,11 @@ const checkUserCredentials = (userName, password, done)  => {
     }
 }
 
-export {registerUser, checkUserCredentials, userDatabase}
+export {
+    registerUser,
+    cleanUpUsers,
+    checkUserCredentials, 
+    userDatabase, 
+    getUser, 
+    getUserIdFromUserName
+}

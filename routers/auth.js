@@ -1,11 +1,9 @@
 import express from "express";
 import jwt from 'jsonwebtoken';
 import * as userControl from "../controllers/users.js"
+import * as teamControl from '../controllers/teams.js'
 
 const router = express.Router();
-
-userControl.registerUser('bettatech', '1234');
-
 
 router.route('/')
     .get((req, res) => {
@@ -15,9 +13,9 @@ router.route('/')
 router.route('/login')
     .post((req, res) => {
         if (!req.body) {
-            return res.status(400).json({message: 'Missing data 1'});
+            return res.status(400).json({message: 'Missing data'});
         } else if (!req.body.user || !req.body.password) {
-            return res.status(400).json({message:req.body})
+            return res.status(400).json({message: 'Missing Data'})
         }
     
         userControl.checkUserCredentials(req.body.user, req.body.password, (err, result) => {
@@ -25,7 +23,8 @@ router.route('/login')
                 return res.status(401).json({message: result})
             }
             //Si son validos, generamos un jwt y lo devolvemos
-            const token = jwt.sign({userId: result}, 'secretPassword');
+            let user = userControl.getUserIdFromUserName(req.body.user);
+            const token = jwt.sign({userId: user.userId}, 'secretPassword')
             
             res.status(200).json(
                 {token: token}

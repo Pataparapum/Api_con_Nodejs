@@ -3,9 +3,15 @@ import { app } from '../myAPI/app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest'
+import * as userControl from '../controllers/users.js'
 
 use(superagent());
 
+before((done) => {
+    userControl.registerUser('bettatech', '1234');
+    userControl.registerUser('mastermind', '4321');
+    done()
+});
 describe('Suite de pruebas auth', () => {
     it('should return 401 no jwt token available', (done) => {
         // Cuando la llamada no tiene correctamente la llave
@@ -57,4 +63,9 @@ describe('Suite de pruebas auth', () => {
                     });
             });
     });
+});
+
+after((done) => {
+    userControl.cleanUpUsers()
+    done()
 });
