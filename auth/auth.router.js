@@ -1,7 +1,7 @@
 import express from "express";
 import jwt from 'jsonwebtoken';
-import * as userControl from "../controllers/users.js"
-import * as teamControl from '../controllers/teams.js'
+import * as userControl from "./users.controller.js"
+import * as teamControl from '../teams/teams.controller.js'
 
 const router = express.Router();
 

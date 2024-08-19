@@ -1,8 +1,8 @@
 import express, { response } from "express";
 import passport from "passport";
-import auth from "../myAPI/auth.js";
-import * as teamsController from "../controllers/teams.js"
-import { getUser } from "../controllers/users.js";
+import auth from "../auth/auth.js";
+import * as teamsController from "./teams.controller.js"
+import { getUser } from "../auth/users.controller.js";
 import axios from "axios";
 
 const router = express.Router();

@@ -1,10 +1,10 @@
 import { assert } from 'chai';  // Using Assert style
-import { app } from '../myAPI/app.js';
+import { app } from '../../myAPI/app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest'
-import * as userControl from '../controllers/users.js'
-import * as teamsControl from '../controllers/teams.js'
+import * as userControl from '../../auth/users.controller.js'
+import * as teamsControl from '../teams.controller.js'
 
 use(superagent());
 

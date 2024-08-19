@@ -23,8 +23,11 @@ const setTeam = (userId, team) => {
 }
 
 const deletePokemonForId = (userId, pokeId) => {
-    teamsDatabase[userId].splice(pokeId, 1)
+    if(teamsDatabase[userId][pokeId]) {
+        teamsDatabase[userId].splice(pokeId, 1)
+    }
 }
+
 
 export {
     bootstrapTeam,
