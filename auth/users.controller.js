@@ -1,5 +1,5 @@
 import {v4 as uuidV4} from 'uuid';
-import * as crypto from '../myAPI/crypto.js';
+import * as crypto from '../tools/crypto.js';
 import * as teams from '../teams/teams.controller.js'
 let userDatabase = {};
 //  userId -> password
